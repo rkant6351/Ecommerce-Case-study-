@@ -20,6 +20,5 @@ namespace Ecom_Application.DAO
 
         bool PlaceOrder(Customers customer, List<Tuple<Products, int>> productsAndQuantities, string shippingAddress);
         List<Tuple<Products, int>> getOrdersByCustomer(int Customer_id);
-
     }
 }

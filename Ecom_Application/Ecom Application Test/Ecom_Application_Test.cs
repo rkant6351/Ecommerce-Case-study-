@@ -5,7 +5,7 @@ using System.Configuration;
 
 namespace Ecom_Application_Test
 {
-    public class Tests
+    public class Ecom_Application_Testing
     {
         private OrderProcessorRepository _processorRepository;
         [SetUp]
@@ -17,7 +17,7 @@ namespace Ecom_Application_Test
 
 
         [Test]
-        public void CreateProducttest()
+        public void CreateProduct_WhenPassed()
         {
             Products product = new Products() { Name = "Paracetamol", Price = 13.99M, Description = "Tablet", StockQuantity = 195 };
             bool actual = _processorRepository.createProduct(product);
@@ -25,9 +25,9 @@ namespace Ecom_Application_Test
         }
 
         [Test]
-        public void addedtocarttest()
+        public void AddToCart_WhenPassed()
         {
-            Customers customers = new Customers() { Customer_id = 10 };
+            Customers customers = new Customers() { Customer_id = 2 };
             Products product = new Products() { Product_id = 2 };
             int quantity = 10;
             bool addedtocart = _processorRepository.addToCart(customers, product, quantity);
@@ -35,7 +35,7 @@ namespace Ecom_Application_Test
         }
 
         [Test]
-        public void notaddedtocarttest()
+        public void AddToCart_WhenFailed()
         {
             Customers customers = new Customers() { Customer_id = 20 };
             Products product = new Products() { Product_id = 8 };
@@ -45,9 +45,9 @@ namespace Ecom_Application_Test
         }
 
         [Test]
-        public void orderplacedtest() 
+        public void PlaceOrder_WhenPassed() 
         {
-            Customers customers = new Customers() { Customer_id = 10 };
+            Customers customers = new Customers() { Customer_id = 6 };
             Products products=new Products() { Product_id = 2 };
             int quantity = 10;
             List<Tuple<Products, int>> testinglist = new List<Tuple<Products, int>>();
@@ -58,7 +58,7 @@ namespace Ecom_Application_Test
         }
 
         [Test]
-        public void notorderplacedtest()
+        public void PlaceOrder_WhenFailed()
         {
             Customers customers = new Customers() { Customer_id = 500 };
             Products products = new Products() { Product_id = 2 };

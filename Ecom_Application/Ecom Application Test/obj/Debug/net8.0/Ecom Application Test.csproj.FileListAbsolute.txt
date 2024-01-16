@@ -6,6 +6,7 @@ C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\ne
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\nunit.engine.api.dll
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\nunit.engine.core.dll
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\testcentric.engine.metadata.dll
+C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\App.config
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\Ecom Application Test.deps.json
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\Ecom Application Test.runtimeconfig.json
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\Ecom Application Test.dll
@@ -111,4 +112,3 @@ C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\obj\Debug\ne
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\obj\Debug\net8.0\Ecom Application Test.pdb
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\obj\Debug\net8.0\Ecom Application Test.genruntimeconfig.cache
 C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\obj\Debug\net8.0\ref\Ecom Application Test.dll
-C:\Users\LENOVO\source\repos\Ecom_Application\Ecom Application Test\bin\Debug\net8.0\App.config

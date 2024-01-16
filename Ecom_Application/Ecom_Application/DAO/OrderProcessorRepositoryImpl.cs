@@ -20,124 +20,113 @@ namespace Ecom_Application.DAO
         {
             try
             {
-                conn = DBConnection.GetConnection();
-                cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandType = System.Data.CommandType.Text;
-                conn.Open();
-                cmd.CommandText = $"insert into customers(Name,email,password) values('{customers.Name}','{customers.Email}','{customers.Password}')";
-                cmd.ExecuteNonQuery();
-                cmd.CommandText = $"select SCOPE_IDENTITY()";
-                SqlDataReader reader = cmd.ExecuteReader();
-                reader.Read();
-                Console.WriteLine($"\n\nYou have been allocated a Customer_id Kindly note it down\n\n\nCustomerid={reader[0]}\n\n");
-                return true;
-
+                using (conn = DBConnection.GetConnection())
+                {
+                    cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    conn.Open();
+                    cmd.CommandText = $"insert into customers(Name,email,password) values('{customers.Name}','{customers.Email}','{customers.Password}')";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = $"select SCOPE_IDENTITY()";
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    reader.Read();
+                    Console.WriteLine($"\n\nYou have been allocated a Customer_id Kindly note it down\n\n\nCustomerid={reader[0]}\n\n");
+                    return true;
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;
             }
-            finally
-            {
-                conn.Close();
-            }
-
         }
 
         public bool createProduct(Products products)
         {
             try
             {
-                conn = DBConnection.GetConnection();
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandType = System.Data.CommandType.Text;
-                conn.Open();
-                cmd.CommandText = $"insert into products(Name,Price,description,stockQuantity) values('{products.Name}','{products.Price}','{products.Description}',{products.StockQuantity})";
-                cmd.ExecuteNonQuery();
-                cmd.CommandText = $"select SCOPE_IDENTITY()";
-                SqlDataReader reader = cmd.ExecuteReader();
-                reader.Read();
-                Console.WriteLine($"\n\nYour Product have been allocated a Product id Kindly note it down\n\n\nproduct id={reader[0]}\n\n");
-                return true;
+                using (conn = DBConnection.GetConnection())
+                {
+
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    conn.Open();
+                    cmd.CommandText = $"insert into products(Name,Price,description,stockQuantity) values('{products.Name}','{products.Price}','{products.Description}',{products.StockQuantity})";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = $"select SCOPE_IDENTITY()";
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    reader.Read();
+                    Console.WriteLine($"\n\nYour Product have been allocated a Product id Kindly note it down\n\n\nproduct id={reader[0]}\n\n");
+                    return true;
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;
             }
-            finally
-            {
-                conn.Close();
-            }
+
         }
 
         public bool addToCart(Customers customer, Products product, int quantity)
         {
             try
             {
-                conn = DBConnection.GetConnection();
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                conn.Open();
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = $"insert into cart(customer_id,product_id,quantity) values({customer.Customer_id},{product.Product_id},{quantity})";
-                int a = cmd.ExecuteNonQuery();
-                if (a > 0)
+                using (conn = DBConnection.GetConnection())
                 {
-                    return true;
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    conn.Open();
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = $"insert into cart(customer_id,product_id,quantity) values({customer.Customer_id},{product.Product_id},{quantity})";
+                    int addedornot = cmd.ExecuteNonQuery();
+                    if (addedornot > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
-
             }
             catch (Exception)
             {
                 return false;
             }
-            finally
-            {
-                conn.Close();
-            }
+
         }
 
         public bool deleteCustomer(int customer_id)
         {
-            conn = DBConnection.GetConnection();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-            cmd.CommandType = System.Data.CommandType.Text;
-            conn.Open();
-            cmd.CommandText = $"Delete from customers where customer_id={customer_id}";
             try
             {
-                int a = cmd.ExecuteNonQuery();
-                if (a > 0)
+                using (conn = DBConnection.GetConnection())
                 {
-                    return true;
-                }
-                else
-                {
-                    throw new CustomerNotFoundException();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    conn.Open();
+                    cmd.CommandText = $"Delete from customers where customer_id={customer_id}";
+
+                    int customerdeletedornot = cmd.ExecuteNonQuery();
+                    if (customerdeletedornot > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
-            catch (CustomerNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
-            }
-            finally
-            {
-                conn.Close();
             }
         }
 
@@ -145,38 +134,30 @@ namespace Ecom_Application.DAO
         {
             try
             {
-                conn = DBConnection.GetConnection();
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandType = System.Data.CommandType.Text;
-                conn.Open();
-                cmd.CommandText = $"Delete from products where product_id={product_id}";
+                using (conn = DBConnection.GetConnection())
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    conn.Open();
+                    cmd.CommandText = $"Delete from products where product_id={product_id}";
 
-                int a = cmd.ExecuteNonQuery();
-                if (a > 0)
-                {
-                    return true;
+                    int productdeletedornot = cmd.ExecuteNonQuery();
+                    if (productdeletedornot > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else
-                {
-                    throw new ProductNotFoundException();
-                }
-            }
-            catch (ProductNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
             }
-            finally
-            {
-                conn.Close();
-            }
-
         }
 
 
@@ -184,36 +165,28 @@ namespace Ecom_Application.DAO
         {
             try
             {
-                conn = DBConnection.GetConnection();
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandType = System.Data.CommandType.Text;
-                conn.Open();
-                cmd.CommandText = $"Delete from cart where customer_id={customer.Customer_id} and product_id={product.Product_id}";
-                int a = cmd.ExecuteNonQuery();
-                if (a > 0)
+                using (conn = DBConnection.GetConnection())
                 {
-                    return true;
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    conn.Open();
+                    cmd.CommandText = $"Delete from cart where customer_id={customer.Customer_id} and product_id={product.Product_id}";
+                    int removedornot = cmd.ExecuteNonQuery();
+                    if (removedornot > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else
-                {
-                    throw new ProductNotFoundException();
-                }
-
-            }
-            catch (ProductNotFoundException ep)
-            {
-                Console.WriteLine(ep.Message);
-                return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
-            }
-            finally
-            {
-                conn.Close();
             }
         }
 
@@ -221,41 +194,39 @@ namespace Ecom_Application.DAO
         {
             try
             {
-                List<Products> productsincartlist = new List<Products>();
-                conn = DBConnection.GetConnection();
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = $"select p.product_id,p.Name,p.Price,p.description from products p join Cart c on c.product_id=p.product_id where c.customer_id={customer.Customer_id}";
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
+                using (conn = DBConnection.GetConnection())
                 {
-                    while (reader.Read())
+                    List<Products> productsincartlist = new List<Products>();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = $"select p.product_id,p.Name,p.Price,p.description from products p join Cart c on c.product_id=p.product_id where c.customer_id={customer.Customer_id}";
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        productsincartlist.Add(new Products()
+                        while (reader.Read())
                         {
-                            Product_id = (int)reader[0],
-                            Name = reader[1].ToString(),
-                            Price = (decimal)reader[2],
-                            Description = (string)reader[3].ToString()
-                        });
+                            productsincartlist.Add(new Products()
+                            {
+                                Product_id = (int)reader[0],
+                                Name = reader[1].ToString(),
+                                Price = (decimal)reader[2],
+                                Description = (string)reader[3].ToString()
+                            });
+                        }
+                        return productsincartlist;
                     }
-                    return productsincartlist;
-                }
-                else
-                {
-                    return null;
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return null;
-            }
-            finally
-            {
-                conn.Close();
             }
         }
 
@@ -264,27 +235,29 @@ namespace Ecom_Application.DAO
         {
             try
             {
-                List<Tuple<Products, int>> customerOrders = new List<Tuple<Products, int>>();
-                conn = DBConnection.GetConnection();
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = $"select  p.product_id, p.name, oi.Quantity from Orders o join Order_items oi on o.order_id=oi.order_id" +
-                    $" join products p  on p.product_id=oi.product_id where o.customer_id={Customer_id}";
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
+                using (conn = DBConnection.GetConnection())
                 {
-                    while (reader.Read())
+                    List<Tuple<Products, int>> customerOrders = new List<Tuple<Products, int>>();
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = $"select  p.product_id, p.name, oi.Quantity,p.price from Orders o join Order_items oi on o.order_id=oi.order_id" +
+                        $" join products p  on p.product_id=oi.product_id where o.customer_id={Customer_id}";
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        Products products = new Products() { Product_id = (int)reader[0], Name = reader[1].ToString() };
-                        customerOrders.Add(Tuple.Create(products, (int)reader[2]));
+                        while (reader.Read())
+                        {
+                            Products products = new Products() { Product_id = (int)reader[0], Name = reader[1].ToString(), Price = ((int)reader[2] * (decimal)reader[3]) };
+                            customerOrders.Add(Tuple.Create(products, (int)reader[2]));
+                        }
+                        return customerOrders;
                     }
-                    return customerOrders;
-                }
-                else
-                {
-                    throw new OrderNotFoundException();
+                    else
+                    {
+                        throw new OrderNotFoundException();
+                    }
                 }
             }
             catch (OrderNotFoundException e)
@@ -297,100 +270,115 @@ namespace Ecom_Application.DAO
                 Console.WriteLine(e.Message);
                 return null;
             }
-            finally
-            {
-                conn.Close();
-            }
         }
 
         public bool PlaceOrder(Customers customer, List<Tuple<Products, int>> productsAndQuantities, string shippingAddress)
         {
             try
             {
-                conn = DBConnection.GetConnection();
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                cmd.CommandType = System.Data.CommandType.Text;
-                conn.Open();
-                decimal totalamount = calculatetotalamount(productsAndQuantities);
-                cmd.CommandText = $"insert into orders(customer_id,order_date,total_price,shipping_address) OUTPUT inserted.order_id values({customer.Customer_id},GETDATE(),{totalamount},'{shippingAddress}')";
-                int order_id = (int)cmd.ExecuteScalar();
-                int placed = 0;
-                foreach (var orderitemandquantity in productsAndQuantities)
+                using (conn = DBConnection.GetConnection())
                 {
-                    cmd.CommandText = $"insert into order_items(order_id,product_id,quantity) values({order_id},{orderitemandquantity.Item1.Product_id},{orderitemandquantity.Item2})";
-                    int insertedinorderitems = cmd.ExecuteNonQuery();
-                    placed += insertedinorderitems;
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    conn.Open();
+                    decimal totalamount = calculatetotalamount(productsAndQuantities);
+                    cmd.CommandText = $"insert into orders(customer_id,order_date,total_price,shipping_address) OUTPUT inserted.order_id values({customer.Customer_id},GETDATE(),{totalamount},'{shippingAddress}')";
+                    int order_id = (int)cmd.ExecuteScalar();
+                    int placed = 0;
+                    foreach (var orderitemandquantity in productsAndQuantities)
+                    {
+                        cmd.CommandText = $"insert into order_items(order_id,product_id,quantity) values({order_id},{orderitemandquantity.Item1.Product_id},{orderitemandquantity.Item2})";
+                        int insertedinorderitems = cmd.ExecuteNonQuery();
+                        placed += insertedinorderitems;
+                    }
+                    if (placed > 0 && order_id > 0)
+                    {
+                        Console.WriteLine($"You have been allocated a order id: {order_id}");
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                if (placed > 0 && order_id > 0)
-                {
-                    Console.WriteLine($"You have been allocated a order id: {order_id}");
-                    conn.Close();
-                    return true;
-                }
-                else
-                {
-                    conn.Close();
-                    return false;
-                }
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error placing order: {ex.Message}");
                 return false;
             }
+
         }
+
+
+
+
+
+
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //Some miscelleneous functions
-        public bool validatecustomerexistance(Customers customer)
+        public bool ValidateCustomerExistance(Customers customer)
         {
-            conn = DBConnection.GetConnection();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-            cmd.CommandType = System.Data.CommandType.Text;
-            conn.Open();
-            cmd.CommandText = $"SELECT CASE WHEN EXISTS (SELECT 1 FROM customers WHERE customer_id = {customer.Customer_id}) THEN 1 ELSE 0 END";
-            int customerexistance = (int)cmd.ExecuteScalar();
-            if (customerexistance == 1)
+            using (conn = DBConnection.GetConnection())
             {
-                cmd.CommandText = $"SELECT CASE WHEN EXISTS (SELECT 1 FROM customers WHERE customer_id = {customer.Customer_id} and password like '{customer.Password}') THEN 1 ELSE 0 END";
-                int passwordvalidation = (int)cmd.ExecuteScalar();
-                if (passwordvalidation == 1)
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandType = System.Data.CommandType.Text;
+                conn.Open();
+                cmd.CommandText = $"SELECT CASE WHEN EXISTS (SELECT 1 FROM customers WHERE customer_id = {customer.Customer_id}) THEN 1 ELSE 0 END";
+                int customerexistance = (int)cmd.ExecuteScalar();
+                if (customerexistance == 1)
+                {
+                    cmd.CommandText = $"SELECT CASE WHEN EXISTS (SELECT 1 FROM customers WHERE customer_id = {customer.Customer_id} and password COLLATE Latin1_General_CS_AS ='{customer.Password}') THEN 1 ELSE 0 END";
+                    int passwordvalidation = (int)cmd.ExecuteScalar();
+                    if (passwordvalidation == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter valid password");
+                        string reenter_password = Console.ReadLine();
+                        cmd.CommandText = $"SELECT CASE WHEN EXISTS (SELECT 1 FROM customers WHERE customer_id = {customer.Customer_id} and password COLLATE Latin1_General_CS_AS ='{reenter_password}') THEN 1 ELSE 0 END";
+                        int passwordrevalidation = (int)cmd.ExecuteScalar();
+                        if(passwordrevalidation == 1)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            throw new Exception("You have entered wrong password twice");
+                        }
+
+                    }
+                }
+                else
                 {
                     conn.Close();
+                    throw new CustomerNotFoundException();
+                }
+            }
+        }
+
+        public bool ValidateProductExistance(int product_id)
+        {
+            using (conn = DBConnection.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandType = System.Data.CommandType.Text;
+                conn.Open();
+                cmd.CommandText = $"SELECT CASE WHEN EXISTS (SELECT 1 FROM Products WHERE Product_id = {product_id}) THEN 1 ELSE 0 END";
+                int productexistance = (int)cmd.ExecuteScalar();
+                if (productexistance == 1)
+                {
                     return true;
                 }
                 else
                 {
-                    throw new Exception("Please enter valid password");
+                    throw new ProductNotFoundException();
                 }
-            }
-            else
-            {
-                conn.Close();
-                throw new CustomerNotFoundException();
-            }
-        }
-
-        public bool validateProductexistance(int product_id)
-        {
-            conn = DBConnection.GetConnection();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-            cmd.CommandType = System.Data.CommandType.Text;
-            conn.Open();
-            cmd.CommandText = $"SELECT CASE WHEN EXISTS (SELECT 1 FROM Products WHERE Product_id = {product_id}) THEN 1 ELSE 0 END";
-            int productexistance = (int)cmd.ExecuteScalar();
-            if (productexistance == 1)
-            {
-                conn.Close();
-                return true;
-            }
-            else
-            {
-                conn.Close();
-                throw new ProductNotFoundException();
             }
         }
 
